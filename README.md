@@ -17,3 +17,20 @@ While it can be simple to accept this explanation its very hard to understand it
 
 ### Access Code
 The code generation is in a separate file, a notebook. The theory behind the code is much too complicated to fully explain. Check a good textbook to learn it fully. The gist is that the code is a group of bits that must have the properties of low cross-correlation, high self-correlation, balance of zeros and ones and orthogonality. To achieve this mathematics provides us with Galois Fields, those fiel ds can be implemented (surprisingly simply) with a Linear Feedback Shift Register (LFSR). Even among this family of codes there are special sequences, for example GPS uses the Gold Code, that mixes multiple LFSRs. 
+
+
+## The Library
+Example:
+```python
+u1 = to_chips(to_bits(to_bytes("Zenith   ")), 0b01101110)
+u2 = to_chips(to_bits(to_bytes("Aerospace")), 0b10101101)
+u3 = to_chips(to_bits(to_bytes("UUUUUUUUU")), 0b11010001)
+out = list(mix(u1, u2, u3))
+
+u1 = get_str(get_bytes(get_bits(get_correlation(out, 0b01101110))))
+u2 = get_str(get_bytes(get_bits(get_correlation(out, 0b10101101))))
+u3 = get_str(get_bytes(get_bits(get_correlation(out, 0b11010001))))
+print(f"u1: {u1}\nu2: {u2}\nu3: {u3}")
+```
+Should print the original strings. Running the `main.py` has a more complete example, adding noise and plotting the process of correlation.
+
